@@ -33,10 +33,77 @@ function countNegs(cellI, cellJ, mat) {
   return negsCount;
 }
 
+function setMines(cellI, cellJ, board) {
+  var emptyCells = getEmptyCells(cellI, cellJ, board);
+  for (var i = 0; i < gLevel.mines; i++) {
+      var emptyCell = emptyCells[getRandomInt(0, emptyCells.length - 1)];
+      board[emptyCell.i][emptyCell.j].isMine = true;
+      // board[emptyCell.i][emptyCell.j].minesAroundCount = 'mine'; // redundant
+      var emptyIdx = emptyCells.indexOf(emptyCell);
+      emptyCells.splice(emptyIdx, 1);
+  }
+}
+
+function setMinesNegsCount(board) {
+  for (var i = 0; i < board.length; i++) {
+      for (var j = 0; j < board[0].length; j++) {
+          board[i][j].minesAroundCount = countNegs(i, j, board);
+      }
+  }
+  return board;
+}
+
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// function runTime(){
+function expandShown(cellI, cellJ, board) {
+  for (var i = cellI - 1; i <= cellI + 1; i++) {
+      if (i < 0 || i > board.length - 1) continue;
+      for (var j = cellJ - 1; j <= cellJ + 1; j++) {
+          if (j < 0 || j > board[0].length - 1) continue;
+          if (i === cellI && j === cellJ) continue;
+          var cell = board[i][j];
+          if (!cell.isShown) {
+              if (cell.minesAroundCount === 0) {
+                  if (cell.isMarked) continue;
+                  cell.isShown = true;
+                  gGame.shownCount++;
+                  var elCell = document.querySelector(`.cell-${i}-${j}`);
+                  elCell.classList.add('free');
+                  expandShown(i, j, gBoard);
+              } else {
+                  if (cell.isMarked) continue;
+                  cell.isShown = true;
+                  gGame.shownCount++;
+                  elCell = document.querySelector(`.cell-${i}-${j}`);
+                  elCell.classList.add('free');
+                  elCell.innerText = cell.minesAroundCount; // DRY
+              }
+          }
+      }
+  }
+}
 
-// }
+function checkGameOver() {
+  for (var i = 0; i < gBoard.length; i++) {
+      for (var j = 0; j < gBoard[i].length; j++) {
+          var cell = gBoard[i][j]
+          if (!cell.isShown) {
+              if (cell.isMarked) {
+                  if (!cell.isMine) return false;
+              } else {
+                  return false
+              }
+          }
+      }
+  }
+  return true
+}
+
+function runTime(){
+  var currTime = new Date();
+    var elSec = document.querySelector('.timer span');
+    gGame.secsPassed = Math.floor((currTime.getTime() - gTimer.getTime()) % 60000 / 1000)
+    elSec.innerText = gGame.secsPassed;
+}
