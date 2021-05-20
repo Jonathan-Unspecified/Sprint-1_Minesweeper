@@ -152,7 +152,7 @@ function cellClicked(i, j, elCell) {  // update
         gGame.shownCount++;
         elCell.innerText = MINE;
         elCell.classList.add('boom');
-        checkGameOver()
+        // checkGameOver()
     } else if (cell.minesAroundCount > 0) {
         cell.isShown = true;
         gGame.shownCount++;
