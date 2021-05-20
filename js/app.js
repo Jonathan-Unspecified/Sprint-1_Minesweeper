@@ -49,15 +49,15 @@ function renderBoard(board) {
         for (var j = 0; j < board[0].length; j++) {
             var currCell = board[i][j];
             strHTML += `\t <td oncontextmenu="cellMark(this)"
-            onclick="cellClicked(this)" class="cell cell-${i}-${j}">`;
-            if (currCell.isShown) {
-                if (currCell.isMine) {
-                    strHTML += MINE;
-                } else {  // DRY
-                    if (!currCell.minesAroundCount) continue;
-                    strHTML += `${currCell.minesAroundCount}`;
-                }
-            }
+            onclick="cellClicked(${i},${j},this)" class="cell cell-${i}-${j}">`;
+            // if (currCell.isShown) {
+            //     if (currCell.isMine) {
+            //         strHTML += MINE;
+            //     } else {  // DRY
+            //         if (!currCell.minesAroundCount) continue;
+            //         strHTML += `${currCell.minesAroundCount}`;
+            //     }
+            // }
             strHTML += '</td> \n';
         }
         strHTML += '</tr>';
