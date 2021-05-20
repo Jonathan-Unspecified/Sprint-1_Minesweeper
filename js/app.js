@@ -11,7 +11,7 @@ var gLevel = {
     size: 4,
     mines: 2,
     lives: 3
-};
+}
 
 
 function init() {
@@ -23,7 +23,7 @@ function init() {
     };
     gBoard = buildBoard();
     renderBoard(gBoard);
-};
+}
 
 function buildBoard() {
     var board = [];
@@ -48,7 +48,7 @@ function renderBoard(board) {
         strHTML += '<tr>';
         for (var j = 0; j < board[0].length; j++) {
             var currCell = board[i][j];
-            strHTML += `\t <td oncontextmenu="cellMark(this)"
+            strHTML += `\t <td oncontextmenu="cellMarked(${i},${j},this)"
             onclick="cellClicked(${i},${j},this)" class="cell cell-${i}-${j}">`;
             // if (currCell.isShown) {
             //     if (currCell.isMine) {
@@ -64,7 +64,7 @@ function renderBoard(board) {
     }
     var elBoard = document.querySelector('.game');
     elBoard.innerHTML = strHTML;
-};
+}
 
 function setMines(cellI, cellJ, board) {
     var emptyCells = getEmptyCells(cellI, cellJ, board);
@@ -86,7 +86,7 @@ function setMinesNegsCount(board) {
     return board;
 }
 
-function energize(i, j, board) { // celllicked()
+function energize(i, j, board) { 
     var cell = gBoard[i][j];
     // gInterval = setInterval(runTime, 10);
     gGame.isOn = true;
@@ -146,7 +146,7 @@ function cellClicked(i, j, elCell) {  // update
         gGame.shownCount++;
         elCell.innerText = VOID;
         elCell.classList.add('free');
-        expandShown(i, j, board);
+        expandShown(i, j, gBoard);
     } else if (cell.isMine) {
         cell.isShown = true;
         gGame.shownCount++;
@@ -160,3 +160,25 @@ function cellClicked(i, j, elCell) {  // update
         elCell.classList.add('free');
     }
 }
+
+function cellMarked(i, j, elCell) { //update
+    var cell = gBoard[i][j];
+    if (cell.isShown) return;
+    if (cell.isMine && !cell.isMarked) {
+        cell.isMarked = true;
+        elCell.innerText = FLAG;
+        elCell.classList.add('flag');
+        gGame.markedCount++;
+    } else if (!cell.isMine && !cell.isMarked) {
+        cell.isMarked = true;
+        elCell.innerText = FLAG;
+        elCell.classList.add('flag');
+        gGame.markedCount++;
+    } else {
+        cell.isMarked = false;
+        elCell.innerText = VOID;
+        elCell.classList.remove('flag');
+        gGame.markedCount--;
+    }
+}
+
