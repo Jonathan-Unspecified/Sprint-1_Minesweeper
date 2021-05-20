@@ -71,7 +71,7 @@ function setMines(cellI, cellJ, board) {
     for (var i = 0; i < gLevel.mines; i++) {
         var emptyCell = emptyCells[getRandomInt(0, emptyCells.length - 1)];
         board[emptyCell.i][emptyCell.j].isMine = true;
-        board[emptyCell.i][emptyCell.j].minesAroundCount = 'mine';
+        // board[emptyCell.i][emptyCell.j].minesAroundCount = 'mine'; // redundant
         var emptyIdx = emptyCells.indexOf(emptyCell);
         emptyCells.splice(emptyIdx, 1);
     }
