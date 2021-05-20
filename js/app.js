@@ -6,7 +6,7 @@ const VOID = '';
 
 var gInterval = 0;
 var gGame;
-var board;
+var gBoard;
 var gLevel = {
     size: 4,
     mines: 2,
@@ -21,8 +21,8 @@ function init() {
         markedCount: 0,
         secsPassed: 0
     };
-    board = buildBoard();
-    renderBoard(board);
+    gBoard = buildBoard();
+    renderBoard(gBoard);
 };
 
 function buildBoard() {
@@ -31,7 +31,7 @@ function buildBoard() {
         board[i] = [];
         for (var j = 0; j < gLevel.size; j++) {
             var cell = {
-                minesAroundCount: 0,
+                minesAroundCount: null,
                 isShown: false,
                 isMine: false,
                 isMarked: false
@@ -44,15 +44,15 @@ function buildBoard() {
 
 function renderBoard(board) {
     var strHTML = '';
-    for (let i = 0; i < board.length; i++) {
+    for (var i = 0; i < board.length; i++) {
         strHTML += '<tr>';
-        for (let j = 0; j < board[0].length; j++) {
+        for (var j = 0; j < board[0].length; j++) {
             var currCell = board[i][j];
             strHTML += `\t <td oncontextmenu="cellMark(this)"
             onclick="cellClicked(this)" class="cell cell-${i}-${j}">`;
             if (currCell.isShown) {
                 if (currCell.isMine) {
-                    strHTML += MINE_IMG;
+                    strHTML += MINE;
                 } else {  // DRY
                     if (!currCell.minesAroundCount) continue;
                     strHTML += `${currCell.minesAroundCount}`;
@@ -87,7 +87,7 @@ function setMinesNegsCount(board) {
 }
 
 function energize(i, j, board) { // celllicked()
-    var cell = board[i][j];
+    var cell = gBoard[i][j];
     // gInterval = setInterval(runTime, 10);
     gGame.isOn = true;
     cell.isShown = true;
@@ -130,5 +130,33 @@ function expandShown(cellI, cellJ, board) {
                 }
             }
         }
+    }
+}
+
+function cellClicked(i, j, elCell) {  // update
+    if (!gGame.isOn) { // DRY
+        energize(i, j, gBoard);
+        return;
+    }
+    var cell = gBoard[i][j];
+    if (cell.isShown) return;
+    if (cell.isMarked) return;
+    if (cell.minesAroundCount === 0) {
+        cell.isShown = true;
+        gGame.shownCount++;
+        elCell.innerText = VOID;
+        elCell.classList.add('free');
+        expandShown(i, j, board);
+    } else if (cell.isMine) {
+        cell.isShown = true;
+        gGame.shownCount++;
+        elCell.innerText = MINE;
+        elCell.classList.add('boom');
+        checkGameOver()
+    } else if (cell.minesAroundCount > 0) {
+        cell.isShown = true;
+        gGame.shownCount++;
+        elCell.innerText = cell.minesAroundCount; // DRY
+        elCell.classList.add('free');
     }
 }
