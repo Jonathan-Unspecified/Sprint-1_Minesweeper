@@ -3,3 +3,9 @@ body {
     text-align: center;
     user-select: none;
 }
+
+.cell {
+    width: 60px;
+    height: 60px;
+    background-color: turquoise;
+}
