@@ -8,15 +8,15 @@
     <title>Minesweeper Lite</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-
+ 
 <body onload="init()" oncontextmenu="return false">
 
-    <div class="timer">TIME: <span></span></div>
     <button onclick="changeLevel(this)">Beginner</button>
     <button onclick="changeLevel(this)">Intermediate</button>
     <button onclick="changeLevel(this)">Expert</button>
-    <div class="lives"></div>
-    <div class="difficulty"></div>
+    <div class="timer">TIME: <span></span></div>
+    <div class="lives"> <span></span> </div>
+    <div onclick="init()" class="status"></div>    
     <div class="main">
         <table border="1" cellpadding="5">
             <thead class="score"></thead>

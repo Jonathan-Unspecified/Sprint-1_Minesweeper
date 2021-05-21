@@ -3,16 +3,23 @@
 const MINE = '💣';
 const FLAG = '🚩';
 const VOID = '';
+const LIFE = '❤';
+const GAME_OVER = '😢';
+const STRIKE = '😒';
+const START = '😃';
+const WIN = '😁';
 
+var gIsOver;
+var gIsVictory;
 var gTimer;
 var gInterval;
-var isFirst;
+var gIsFirst;
 var gGame;
 var gBoard;
 var gLevel = {
     size: 4,
     mines: 2,
-    lives: 3
+    lives: 2
 }
 
 
@@ -25,7 +32,12 @@ function init() {
     };
     gBoard = buildBoard();
     renderBoard(gBoard);
-    isFirst = true;
+    gIsFirst = true;
+    setLives();
+    gIsOver = false;
+    gIsVictory = false;
+    var elStatus = document.querySelector('.status');
+    elStatus.innerText = START;
 }
 
 function buildBoard() {
@@ -89,37 +101,54 @@ function energize(i, j, board) {
 }
 
 function cellClicked(i, j, elCell) {  // update
-    if (!gGame.isOn) { // DRY
+    if (!gGame.isOn) {
         energize(i, j, gBoard);
         gTimer = new Date();
         gInterval = setInterval(runTime, 0);
-        isFirst = false;
+        gIsFirst = false;
         return;
     }
+    if (gIsOver) return;
     var cell = gBoard[i][j];
     if (cell.isShown) return;
     if (cell.isMarked) return;
+    if (cell.isMine) {
+        cell.isShown = true;
+        gGame.shownCount++;
+        elCell.innerText = MINE;
+        elCell.classList.add('boom');
+        gLevel.lives--;
+        setLives();
+        var elStatus = document.querySelector('.status');
+        elStatus.innerText = STRIKE;
+        checkGameOver();
+        return;
+    }
     if (cell.minesAroundCount === 0) {
         cell.isShown = true;
         gGame.shownCount++;
         elCell.innerText = VOID;
         elCell.classList.add('free');
         expandShown(i, j, gBoard);
-    } else if (cell.isMine) {
-        cell.isShown = true;
-        gGame.shownCount++;
-        elCell.innerText = MINE;
-        elCell.classList.add('boom');
-        // checkGameOver()
-    } else if (cell.minesAroundCount > 0) {
+    } else {
         cell.isShown = true;
         gGame.shownCount++;
         elCell.innerText = cell.minesAroundCount; // DRY
         elCell.classList.add('free');
     }
+    checkVictory();
 }
 
 function cellMarked(i, j, elCell) { //update
+    if (!gGame.isOn) {
+        energize(i, j, gBoard);
+        gTimer = new Date();
+        gInterval = setInterval(runTime, 0);
+        gIsFirst = false;
+        return;
+    }
+    if (gIsVictory) return;
+    if (gIsOver) return;
     var cell = gBoard[i][j];
     if (cell.isShown) return;
     if (cell.isMine && !cell.isMarked) {
@@ -138,6 +167,7 @@ function cellMarked(i, j, elCell) { //update
         elCell.classList.remove('flag');
         gGame.markedCount--;
     }
+    checkVictory();
 }
 
 function changeLevel(elBtn) {
@@ -146,14 +176,17 @@ function changeLevel(elBtn) {
         case 'Beginner':
             gLevel.size = 4;
             gLevel.mines = 2;
+            gLevel.lives = 2;
             break;
         case 'Intermediate':
             gLevel.size = 8;
             gLevel.mines = 12;
+            gLevel.lives = 3;
             break;
         case 'Expert':
             gLevel.size = 12;
             gLevel.mines = 30;
+            gLevel.lives = 4;
             break;
     }
     init();
