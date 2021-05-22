@@ -10,6 +10,10 @@ body {
     background-color: turquoise;
 }
 
+.cell:hover {
+    cursor: crosshair;
+}
+
 .free {
     background-color: darkcyan;
 }
@@ -20,6 +24,10 @@ body {
 
 .status {
     font-size: xx-large;
+}
+
+.status:hover {
+    cursor: pointer;
 }
 
 .timer {
@@ -38,3 +46,10 @@ body {
     justify-content: center;
 }
 
+button {
+    border-radius: 10%;
+}
+
+button:hover {
+    cursor: pointer;
+}
