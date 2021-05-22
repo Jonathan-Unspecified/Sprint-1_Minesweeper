@@ -91,7 +91,6 @@ function checkGameOver() {
           if (elCell.classList.contains('flag')) {
             elCell.classList.remove('flag');
           }
-          elCell.classList.add('boom');
         }
       }
     }
