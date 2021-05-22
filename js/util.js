@@ -8,7 +8,7 @@ function getEmptyCells(cellI, cellJ, board) {
       var cell = board[i][j]
       var cellIdx = { i, j }
       // if (!cell.isMine && !cell.isShown) {
-        emptyCells.push(cellIdx)
+      emptyCells.push(cellIdx)
       // }
     }
   }
@@ -82,26 +82,26 @@ function expandShown(cellI, cellJ, board) {
 function checkGameOver() {
   if (gLevel.lives === 0) {
     for (var i = 0; i < gBoard.length; i++) {
-        for (var j = 0; j < gBoard[0].length; j++) {
-            var cell = gBoard[i][j];
-            if (cell.isMine) {
-                cell.isShown = true;
-                var elCell = document.querySelector(`.cell-${i}-${j}`);
-                elCell.innerText = MINE;
-                if (elCell.classList.contains('flag')) {
-                    elCell.classList.remove('flag');
-                }
-                elCell.classList.add('boom');
-            }
+      for (var j = 0; j < gBoard[0].length; j++) {
+        var cell = gBoard[i][j];
+        if (cell.isMine) {
+          cell.isShown = true;
+          var elCell = document.querySelector(`.cell-${i}-${j}`);
+          elCell.innerText = MINE;
+          if (elCell.classList.contains('flag')) {
+            elCell.classList.remove('flag');
+          }
+          elCell.classList.add('boom');
         }
+      }
     }
     gIsOver = true;
-    var elStatus = document.querySelector('.status'); 
+    var elStatus = document.querySelector('.status');
     elStatus.innerText = GAME_OVER;
     clearInterval(gInterval);
     gInterval = null;
-
-}
+    LOSE_SND.play();
+  }
 }
 
 function checkVictory() {
@@ -109,22 +109,23 @@ function checkVictory() {
   var board = gLevel.size ** 2;
   if (gGame.markedCount > gLevel.mines) return;
   if ((gGame.shownCount) + (gGame.markedCount) === board) {
-      gIsVictory = true;
-      clearInterval(gInterval);
-      gInterval = null;
-      var elStatus = document.querySelector('.status');
-      elStatus.innerText = WIN;
+    gIsVictory = true;
+    clearInterval(gInterval);
+    gInterval = null;
+    var elStatus = document.querySelector('.status');
+    elStatus.innerText = WIN;
+    WIN_SND.play();
   }
 }
 
-function runTime() { 
+function runTime() {
   var elSec = document.querySelector('.timer span');
-    elSec.innerText = gGame.secsPassed++;
-  }
-  
-  function reset() {
+  elSec.innerText = gGame.secsPassed++;
+}
+
+function reset() {
   var elSec = document.querySelector('.timer span');
-    elSec.innerText = 0;
+  elSec.innerText = 0;
 
 }
 
@@ -132,6 +133,6 @@ function setLives() {
   var elLives = document.querySelector('.lives span')
   elLives.innerText = '';
   for (var i = 0; i < gLevel.lives; i++) {
-      elLives.innerText += LIFE;
+    elLives.innerText += LIFE;
   }
 }

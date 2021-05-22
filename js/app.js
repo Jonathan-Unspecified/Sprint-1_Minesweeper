@@ -9,6 +9,11 @@ const STRIKE = '😒';
 const START = '😃';
 const WIN = '😁';
 
+const WIN_SND = new Audio('media/win.wav');
+const LOSE_SND = new Audio('media/lose.wav');
+const MINE_SND = new Audio('media/explosion.wav');
+const PICK_SND = new Audio('media/pick.wav');
+
 var gIsOver;
 var gIsVictory;
 var gInterval;
@@ -120,6 +125,7 @@ function cellClicked(i, j, elCell) {
         setLives();
         var elStatus = document.querySelector('.status');
         elStatus.innerText = STRIKE;
+        MINE_SND.play();
         checkGameOver();
         return;
     }
@@ -187,5 +193,6 @@ function changeLevel(elBtn) {
             break;
     }
     init();
+    PICK_SND.play();
 }
 

@@ -23,10 +23,18 @@ body {
 }
 
 .timer {
-font-size: xx-large;
+    margin-top: 20px;
+    font-size: xx-large;
 }
 
 .lives {
-font-size: xx-large;
-color: deeppink;
+    font-size: xx-large;
+    color: deeppink;
 }
+
+.main {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
