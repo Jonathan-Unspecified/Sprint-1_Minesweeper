@@ -96,7 +96,6 @@ function checkGameOver() {
         }
     }
     gIsOver = true;
-    // openModal(gIsOver); TO DO
     var elStatus = document.querySelector('.status'); 
     elStatus.innerText = GAME_OVER;
     clearInterval(gInterval);
@@ -112,9 +111,9 @@ function checkVictory() {
   if ((gGame.shownCount) + (gGame.markedCount) === board) {
       gIsVictory = true;
       clearInterval(gInterval);
+      gInterval = null;
       var elStatus = document.querySelector('.status');
       elStatus.innerText = WIN;
-      // openModal(gIsVictory) TO DO
   }
 }
 

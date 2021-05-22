@@ -17,3 +17,16 @@ body {
 .boom {
     background-color: red;
 }
+
+.status {
+    font-size: xx-large;
+}
+
+.timer {
+font-size: xx-large;
+}
+
+.lives {
+font-size: xx-large;
+color: deeppink;
+}
