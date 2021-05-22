@@ -11,7 +11,6 @@ const WIN = '😁';
 
 var gIsOver;
 var gIsVictory;
-var gTimer;
 var gInterval;
 var gIsFirst;
 var gGame;
@@ -22,13 +21,12 @@ var gLevel = {
     lives: 2
 }
 
-
 function init() {
     gGame = {
         isOn: false,
         shownCount: 0,
         markedCount: 0,
-        secsPassed: 0
+        secsPassed: 0,
     };
     gBoard = buildBoard();
     renderBoard(gBoard);
@@ -38,6 +36,9 @@ function init() {
     gIsVictory = false;
     var elStatus = document.querySelector('.status');
     elStatus.innerText = START;
+    clearInterval(gInterval);
+    gInterval = null;
+    reset();
 }
 
 function buildBoard() {
@@ -68,7 +69,7 @@ function renderBoard(board) {
             // if (currCell.isShown) {
             //     if (currCell.isMine) {
             //         strHTML += MINE;
-            //     } else {  // DRY
+            //     } else {  
             //         if (!currCell.minesAroundCount) continue;
             //         strHTML += `${currCell.minesAroundCount}`;
             //     }
@@ -83,7 +84,7 @@ function renderBoard(board) {
 
 function energize(i, j, board) {
     var cell = gBoard[i][j];
-    // gInterval = runTime();
+    gInterval = setInterval(runTime, 1000)
     gGame.isOn = true;
     cell.isShown = true;
     gGame.shownCount++;
@@ -100,11 +101,9 @@ function energize(i, j, board) {
     }
 }
 
-function cellClicked(i, j, elCell) {  // update
+function cellClicked(i, j, elCell) {  
     if (!gGame.isOn) {
         energize(i, j, gBoard);
-        gTimer = new Date();
-        gInterval = setInterval(runTime, 0);
         gIsFirst = false;
         return;
     }
@@ -139,11 +138,9 @@ function cellClicked(i, j, elCell) {  // update
     checkVictory();
 }
 
-function cellMarked(i, j, elCell) { //update
+function cellMarked(i, j, elCell) { 
     if (!gGame.isOn) {
         energize(i, j, gBoard);
-        gTimer = new Date();
-        gInterval = setInterval(runTime, 0);
         gIsFirst = false;
         return;
     }

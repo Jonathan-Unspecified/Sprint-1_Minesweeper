@@ -1,10 +1,5 @@
 'use strict';
 
-// function renderCell(location, value) {
-//   var elCell = document.querySelector(`.cell${location.i}-${location.j}`);
-//   elCell.innerHTML = value;
-// }
-
 function getEmptyCells(cellI, cellJ, board) {
   var emptyCells = []
   for (var i = 0; i < board.length; i++) {
@@ -123,11 +118,15 @@ function checkVictory() {
   }
 }
 
-function runTime() { // incomplete 
-  var currTime = new Date();
+function runTime() { 
   var elSec = document.querySelector('.timer span');
-  gGame.secsPassed = Math.floor((currTime.getTime() - gTimer.getTime()) % 60000 / 1000)
-  elSec.innerText = gGame.secsPassed;
+    elSec.innerText = gGame.secsPassed++;
+  }
+  
+  function reset() {
+  var elSec = document.querySelector('.timer span');
+    elSec.innerText = 0;
+
 }
 
 function setLives() {
